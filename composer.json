@@ -11,5 +11,8 @@
 			"App\\Controllers\\": "app/controllers/",
 			"App\\Models\\": "app/models/"
 		}
+	},
+	"require": {
+		"vlucas/phpdotenv": "^5.5"
 	}
 }
