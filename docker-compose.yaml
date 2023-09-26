@@ -1,33 +1,32 @@
-version: "1.0"
+version: "3.8"
+
 services:
+
   web-server:
     build:
       dockerfile: .dockerfile
       context: .
-    restart: always
+    restart: unless-stopped
     volumes:
-      - "./html/:/var/www/html/"
+      - db:/var/lib/mysql
     ports:
-      - "8000:80"
+      - "80:80"
+    networks:
+      - app-network
+
   mysql-server:
-    image: mysql
-    restart: always
+    image: mysql:8.0
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
 
-  phpmyadmin:
-    image: phpmyadmin
-    restart: always
-    ports:
-      - 8080:80
-    depends_on:
-      - mysql-server
-    environment:
-      - PMA_ARBITRARY=1
+networks:
+  app-network:
+
 volumes:
-  my-db:
+  db:
