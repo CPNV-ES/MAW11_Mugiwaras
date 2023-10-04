@@ -7,10 +7,10 @@ services:
       dockerfile: .dockerfile
       context: .
     restart: unless-stopped
-    volumes:
-      - db:/var/lib/mysql
     ports:
       - "80:80"
+    volumes:
+      - "app:/var/www"
     networks:
       - app-network
 
@@ -24,6 +24,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - "./app/database:/docker-entrypoint-initdb.d"
+      - "db:/var/lib/mysql"
     ports:
       - "3306:3306"
 
@@ -32,3 +33,4 @@ networks:
 
 volumes:
   db:
+  app:
