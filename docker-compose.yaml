@@ -27,8 +27,6 @@ services:
       - "db:/var/lib/mysql"
     networks:
       - app-network
-    ports:
-      - "3306:3306"
 
 networks:
   app-network:
