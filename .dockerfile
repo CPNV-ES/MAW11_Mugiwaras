@@ -12,6 +12,8 @@ RUN apt update \
 
 COPY . /var/www/html
 
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN useradd composer
