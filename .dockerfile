@@ -3,13 +3,15 @@
 FROM php:8.2-apache
 
 RUN apt update \
-    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install mysqli pdo pdo_mysql \
+    && docker-php-ext-enable pdo_mysql \
     && apt install -y \ 
     git \
     unzip \
     zip
 
 COPY . /var/www/html
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN useradd composer
