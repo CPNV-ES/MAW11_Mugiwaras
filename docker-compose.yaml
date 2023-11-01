@@ -7,26 +7,31 @@ services:
       dockerfile: .dockerfile
       context: .
     restart: unless-stopped
-    volumes:
-      - db:/var/lib/mysql
+    hostname: web-server
+    depends_on:
+      - mysql-server
     ports:
       - "80:80"
+    volumes:
+      - "app:/var/www/html"
     networks:
-      - app-network
+      - default
 
   mysql-server:
     image: mysql:8.0
     restart: unless-stopped
+    hostname: mysql-server
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "3306:3306"
-
-networks:
-  app-network:
+    volumes:
+      - "./app/database:/docker-entrypoint-initdb.d"
+      - "db:/var/lib/mysql"
+    networks:
+      - default
 
 volumes:
   db:
+  app:
