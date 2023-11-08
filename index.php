@@ -1,8 +1,9 @@
 <?php
 
+use App;
+
 require './vendor/autoload.php';
 
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__)->load();
 
-
-require './app/router.php';
+Router::get('/{hello}', 'Controller@index');

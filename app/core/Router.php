@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core;
+namespace App;
 
 /**
  * Router class to handle request routing.
@@ -8,26 +8,6 @@ namespace App\Core;
 
 class Router
 {
-    /**
-     * The URI pattern the route responds to.
-     *
-     * @var string
-     */
-    public $uri;
-
-    /**
-     * The HTTP methods the route responds to.
-     *
-     * @var array
-     */
-    public $methods;
-
-    public function __construct($methods, $uri, $action)
-    {
-        $this->uri = $uri;
-        $this->methods = (array) $methods;
-    }
-
     /**
      * get
      *
@@ -37,10 +17,21 @@ class Router
      */
     public static function get($uri, $callback)
     {
-        $callback = explode('@', $callback);
-        $controller = new $callback[0];
-        $function = new $controller->$callback[1];
+        $params = [];
+        if(preg_match('/{[a-z_]+}/i', $uri, $matches)){
+            foreach($matches as $match){
+                array_push($params, $match);
+            }
+        }
 
+        $callback = explode('@', $callback);
+        $controller = "App\\Controllers\\" . $callback[0];
+        $controller = new $controller;
+        BaseController::index();
+        die();
+        $action = new $controller->$callback[1];
+
+        $action($params);
     }
 
     /**
