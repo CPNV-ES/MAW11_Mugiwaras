@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Core;
 
+use App\Controller\Controller;
 /**
  * Router class to handle request routing.
  */
