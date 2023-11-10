@@ -8,7 +8,8 @@ class Controller extends BaseController
 {
     public function index($msg = [])
     {
-        echo "$msg from Controller";
+        print_r($msg);
+        echo "from Controller";
         // $this->view('home');
     }
 }
