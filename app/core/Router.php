@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Core;
+namespace Mugiwaras\Framework\Core;
 
-use App\Controller\Controller;
+use Mugiwaras\Framework\Controllers\Controller;
 use Exception;
 
 /**
@@ -115,7 +115,7 @@ class Router
     private static function extractAction($action)
     {
         $action = explode('@', $action);
-        $controller = "App\\Controllers\\" . $action[0];
+        $controller = "Mugiwaras\\Framework\\Controllers\\" . $action[0];
         $function = $action[1];
         return [$controller, $function];
     }
