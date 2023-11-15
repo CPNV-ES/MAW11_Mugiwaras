@@ -131,8 +131,8 @@ class Router
         $uriPattern = str_replace('/', '\/', $uriPattern);
         $uriPattern = preg_replace('/{\w+}/', '\w+', $uriPattern);
         $uriPattern = '/^\A' . $uriPattern . '\Z$/';
-        
-        if (!preg_match($uriPattern, $uri, $matches)){
+
+        if (!preg_match($uriPattern, $uri, $matches) || $_SERVER['REQUEST_METHOD'] !== $method){
             throw new Exception("Route not found", 404);
         }
     }
