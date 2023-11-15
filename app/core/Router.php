@@ -23,8 +23,7 @@ class Router
 
         [$controller, $function] = Router::extractAction($callback);
 
-        $controller = new $controller;
-        $controller->$function($params);
+        Router::dispatch($controller, $function, $params);
     }
 
     /**
@@ -110,5 +109,10 @@ class Router
         $controller = "App\\Controllers\\" . $action[0];
         $function = $action[1];
         return [$controller, $function];
+    }
+    private static function dispatch($controller, $function, $params)
+    {
+        $controller = new $controller;
+        $controller->$function($params);
     }
 }
