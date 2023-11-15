@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Controller\Controller;
+use Exception;
 
 /**
  * Router class to handle request routing.
@@ -21,7 +22,10 @@ class Router
     {
         $uri = $_SERVER['REQUEST_URI'];
 
+        Router::validateRoute($uriPattern, $uri, 'GET');
+
         $params = Router::mapParameters($uriPattern, $uri);
+
         [$controller, $function] = Router::extractAction($callback);
 
         Router::dispatch($controller, $function, $params);
@@ -115,9 +119,21 @@ class Router
         $function = $action[1];
         return [$controller, $function];
     }
+
     private static function dispatch($controller, $function, $params)
     {
         $controller = new $controller;
         $controller->$function($params);
+    }
+
+    private static function validateRoute($uriPattern, $uri, $method)
+    {
+        $uriPattern = str_replace('/', '\/', $uriPattern);
+        $uriPattern = preg_replace('/{\w+}/', '\w+', $uriPattern);
+        $uriPattern = '/^\A' . $uriPattern . '\Z$/';
+        
+        if (!preg_match($uriPattern, $uri, $matches)){
+            throw new Exception("Route not found", 404);
+        }
     }
 }
