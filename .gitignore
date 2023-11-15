@@ -442,3 +442,5 @@ composer.lock
 *.scss.map
 
 .env
+
+app/database/

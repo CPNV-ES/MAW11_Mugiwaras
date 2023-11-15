@@ -6,14 +6,10 @@ use App\Core\BaseController;
 
 class Controller extends BaseController
 {
-    public function index()
+    public function index($msg = [])
     {
-        echo "Hello from Controller";
+        print_r($msg);
+        echo "from Controller";
         // $this->view('home');
-    }
-
-    public function login()
-    {
-        $this->view('auth.login');
     }
 }
