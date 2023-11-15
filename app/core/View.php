@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Mugiwaras\Framework\Core;
 
 class View
 {
