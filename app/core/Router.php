@@ -21,15 +21,10 @@ class Router
     {
         $params = Router::mapParameters($uriPattern);
 
-        $callback = explode('@', $callback);
-        $controller = "App\\Controllers\\" . $callback[0];
-        $controller = new $controller;
-        $function = $callback[1];
-        $controller->$function($params);
-        die();
-        $action = new $controller->$callback[1];
+        [$controller, $function] = Router::extractAction($callback);
 
-        $action($params);
+        $controller = new $controller;
+        $controller->$function($params);
     }
 
     /**
@@ -93,12 +88,27 @@ class Router
      * @param  string $pattern - uri pattern to match
      * @return array array of mapped parameters
      */
-    private static function mapParameters($pattern){
+    private static function mapParameters($pattern)
+    {
         $realUri = explode('/', $_SERVER['REQUEST_URI']);
         $uriPattern = explode('/', $pattern);
         $dirtyParametersKeys = array_diff($uriPattern, $realUri);
         $cleanedParametersKeys = str_replace(['{', '}'], '', $dirtyParametersKeys);
         $parametersValues = array_diff($realUri, $uriPattern);
         return array_combine($cleanedParametersKeys, $parametersValues);
+    }
+    
+    /**
+     * Extract the controller class and the function from the callback given. 
+     *
+     * @param  string $action
+     * @return array array containing  controller class and function
+     */
+    private static function extractAction($action)
+    {
+        $action = explode('@', $action);
+        $controller = "App\\Controllers\\" . $action[0];
+        $function = $action[1];
+        return [$controller, $function];
     }
 }
