@@ -19,8 +19,9 @@ class Router
      */
     public static function get($uriPattern, $callback)
     {
-        $params = Router::mapParameters($uriPattern);
+        $uri = $_SERVER['REQUEST_URI'];
 
+        $params = Router::mapParameters($uriPattern, $uri);
         [$controller, $function] = Router::extractAction($callback);
 
         Router::dispatch($controller, $function, $params);
@@ -87,16 +88,20 @@ class Router
      * @param  string $pattern - uri pattern to match
      * @return array array of mapped parameters
      */
-    private static function mapParameters($pattern)
+    private static function mapParameters($pattern, $uri)
     {
-        $realUri = explode('/', $_SERVER['REQUEST_URI']);
-        $uriPattern = explode('/', $pattern);
-        $dirtyParametersKeys = array_diff($uriPattern, $realUri);
+        $uriSegments = explode('/', $uri);
+        $uriPatternSegments = explode('/', $pattern);
+
+        $dirtyParametersKeys = array_diff($uriPatternSegments, $uriSegments);
+
         $cleanedParametersKeys = str_replace(['{', '}'], '', $dirtyParametersKeys);
-        $parametersValues = array_diff($realUri, $uriPattern);
+
+        $parametersValues = array_diff($uriSegments, $uriPatternSegments);
+
         return array_combine($cleanedParametersKeys, $parametersValues);
     }
-    
+
     /**
      * Extract the controller class and the function from the callback given. 
      *
