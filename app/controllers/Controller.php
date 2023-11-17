@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace Mugiwaras\Framework\Controllers;
 
-use App\Core\BaseController;
+use Mugiwaras\Framework\Core\BaseController;
 
 class Controller extends BaseController
 {
