@@ -15,12 +15,10 @@ class Router
      * Constructor for Router class.
      *
      * @param  array $routes array of Route objects
+     * @param  string $defaultNamespace default namespace to use to call controllers
      * @return void
      */
-    public function __construct(private array $routes)
-    {
-        $this->routes = $routes;
-    }
+    public function __construct(private array $routes, private $defaultNamespace="App\\Controllers\\"){}
 
     /**
      * Handles the incoming request routing.
@@ -67,10 +65,10 @@ class Router
      * @param  string $action
      * @return array array containing  controller class and function
      */
-    private static function extractAction($action)
+    private function extractAction($action)
     {
         $action = explode('@', $action);
-        $controller = "Mugiwaras\\Framework\\Controllers\\" . $action[0];
+        $controller = $this->defaultNamespace . $action[0];
         $function = $action[1];
         return [$controller, $function];
     }
