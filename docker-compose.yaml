@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+
+  web-server:
+    build:
+      dockerfile: .dockerfile
+      context: .
+    restart: unless-stopped
+    hostname: web-server
+    depends_on:
+      - mysql-server
+    ports:
+      - "80:80"
+    volumes:
+      - "app:/var/www/html"
+    networks:
+      - default
+
+  mysql-server:
+    image: mysql:8.0
+    restart: unless-stopped
+    hostname: mysql-server
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - "./app/database:/docker-entrypoint-initdb.d"
+      - "db:/var/lib/mysql"
+    networks:
+      - default
+
+volumes:
+  db:
+  app:

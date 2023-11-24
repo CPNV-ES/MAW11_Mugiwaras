@@ -1,0 +1,18 @@
+{
+	"name": "mugiwaras/framework",
+	"description": "A simple PHP framework for a web site",
+	"type": "php-framework",
+	"require-dev": {
+		"phpunit/phpunit": "10"
+	},
+	"autoload": {
+		"psr-4": {
+			"Mugiwaras\\Framework\\": "/",
+			"Mugiwaras\\Framework\\Core\\": "app/core/",
+			"Mugiwaras\\Framework\\Controllers\\": "app/controllers/"
+		}
+	},
+	"require": {
+		"vlucas/phpdotenv": "^5.5"
+	}
+}
