@@ -29,20 +29,14 @@ class Router
      */
     public function run()
     {
-        $uri = $_SERVER['REQUEST_URI'];
-        $method = $_SERVER['REQUEST_METHOD'];
+        $request = new Request();
 
-        $route = Router::existingRoute($uri, $method);
+        $route = Router::existingRoute($request->uri, $request->method);
         
-        $params = Router::mapParameters($route->uriPattern, $uri);
+        $params = Router::mapParameters($route->uriPattern, $request->uri);
 
-        $body = $this->getRequestContent($method);
-
-        if ($body) {
-            $content = $this->mapRequestContent($body);
-            $params = array_merge($params, $content);
-        }
-
+        $params = array_merge($params, $request->body);
+        
         [$controller, $function] = Router::extractAction($route->action);
 
         Router::dispatch($controller, $function, $params);
@@ -135,55 +129,5 @@ class Router
             }
         }
         throw new Exception("Route not found", 404);
-    }
-
-    /**
-     * Get the request content based on the request method.
-     *
-     * @param  string $httpMethod HTTP method of the request which is used to determine the request content
-     * @return array|string|null Returns the request content. Returns null if the request method is GET or DELETE.
-     */
-    private function getRequestContent($httpMethod)
-    {
-        switch ($httpMethod) {
-            case 'GET':
-                return null;
-                break;
-            case 'POST':
-                $body = $_POST;
-                break;
-            case 'PUT':
-                $body = file_get_contents('php://input');
-                break;
-            case 'PATCH':
-                $body = file_get_contents('php://input');
-                break;
-            case 'DELETE':
-                return null;
-                break;
-            default:
-                throw new Exception("Unsupported request method", 500);
-                break;
-        }
-
-        return $body;
-    }
-    
-    /**
-     * Map the request content to a key array.
-     *
-     * @param  array|string $body request content
-     * @return array
-     */
-    private function mapRequestContent($body)
-    {
-        $content = [];
-        if (is_array($body)) {
-            $content = $body;
-        } else {
-            parse_str($body, $content);
-        }
-
-        return $content;
     }
 }
