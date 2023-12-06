@@ -35,7 +35,7 @@ class Router
         
         $params = Router::mapParameters($route->uriPattern, $request->uri);
 
-        $params = array_merge($params, $request->body);
+        $params = array_merge($params, $request->body());
         
         [$controller, $function] = Router::extractAction($route->action);
 
