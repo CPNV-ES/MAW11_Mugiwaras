@@ -8,10 +8,11 @@ class Request
     public readonly String $uri;
     private mixed $body;
     public readonly String $method;
+    public readonly mixed $queryStrings;
 
     public function __construct()
     {
-        $this->uri = $_SERVER['REQUEST_URI'];
+        [$this->uri, $this->queryStrings] = $this->extractQueryStringFromURI($_SERVER['REQUEST_URI']);
         $this->body = $this->mapRequestContent(file_get_contents('php://input'));
         $this->method = $this->setRequestMethod();
     }
@@ -69,5 +70,20 @@ class Request
             return $method;
         }
         return null;
+    }
+    
+    /**
+     * Extract the query string from the uri and returns an array containing the trimmed uri and the query string array.
+     *
+     * @param  string $uri
+     * @return array|null array containing the trimmed uri and the query string array or null if no query string is found
+     */
+    private function extractQueryStringFromURI($uri){
+        $queryString = explode('?', $uri);
+        if(count($queryString) > 1){
+            parse_str($queryString[1], $queryStrings);
+            return [$queryString[0], $queryStrings];
+        }
+        return [$uri, []];
     }
 }
