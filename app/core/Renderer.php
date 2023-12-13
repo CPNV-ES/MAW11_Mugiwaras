@@ -68,15 +68,16 @@ class Renderer
         ob_start();
 
         extract($params);
-
+        
         require $viewPath;
-
+        
         $content = ob_get_clean();
-
+        
         if (empty($this->layoutPath)) {
-            return $content;
+            echo $content;
+            return;
         }
-
+        
         $this->Sections["content"] = $content;
 
         return $this->render($this->layoutPath);
