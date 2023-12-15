@@ -18,6 +18,10 @@ class Renderer
     private array $Sections = [];
 
 
+    /**
+     * @param  string $viewDirectoryPath The path to the directory where the views are stored
+     * @return void
+     */
     public function __construct(string $viewDirectoryPath)
     {
         if (!is_dir($viewDirectoryPath)) {
@@ -27,7 +31,14 @@ class Renderer
         $this->viewDirectoryPath = $viewDirectoryPath;
     }
 
-    public function Section(string $name, string $content): void
+    /**
+     * Create a section that stores the given content under the given name
+     *
+     * @param  string $name
+     * @param  mixed $content
+     * @return void
+     */
+    public function Section(string $name, mixed $content): void
     {
 
         if (array_key_exists($name, $this->Sections)) {
@@ -37,6 +48,12 @@ class Renderer
         $this->Sections[$name] = $content;
     }
 
+    /**
+     * Start a new section with the given name
+     *
+     * @param  string $name
+     * @return void
+     */
     public function startSection(string $name): void
     {
         $this->currentSectionName = $name;
@@ -44,17 +61,35 @@ class Renderer
         ob_start();
     }
 
+    /**
+     * End the current section
+     *
+     * @return void
+     */
     public function endSection(): void
     {
         $this->Section($this->currentSectionName, ob_get_clean());
         unset($this->currentSectionName);
     }
-
+    
+    /**
+     * Render the content of the section with the given name
+     *
+     * @param  mixed $name
+     * @return void
+     */
     public function renderSection(string $name)
     {
         return $this->Sections[$name];
     }
 
+    /**
+     * Render the given view with the given parameters. If a layout is set, the view will be rendered inside the layout
+     *
+     * @param  string $viewName
+     * @param  array $params
+     * @return void
+     */
     public function render(string $viewName, array $params = [])
     {
         $viewPath = $this->viewDirectoryPath . DIRECTORY_SEPARATOR . $viewName . "." . $this->viewFileExtension;
@@ -68,21 +103,27 @@ class Renderer
         ob_start();
 
         extract($params);
-        
+
         require $viewPath;
-        
+
         $content = ob_get_clean();
-        
+
         if (empty($this->layoutPath)) {
             echo $content;
             return;
         }
-        
+
         $this->Sections["content"] = $content;
 
         return $this->render($this->layoutPath);
     }
 
+    /**
+     * Set the layout that should be used to render the view
+     *
+     * @param  string $layout
+     * @return void
+     */
     public function layout(string $layout): void
     {
         $this->layoutPath = $layout;
