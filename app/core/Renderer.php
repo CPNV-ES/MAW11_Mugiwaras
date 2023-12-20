@@ -38,7 +38,7 @@ class Renderer
      * @param  mixed $content
      * @return void
      */
-    public function Section(string $name, mixed $content): void
+    public function section(string $name, mixed $content): void
     {
 
         if (array_key_exists($name, $this->Sections)) {
@@ -68,7 +68,7 @@ class Renderer
      */
     public function endSection(): void
     {
-        $this->Section($this->currentSectionName, ob_get_clean());
+        $this->section($this->currentSectionName, ob_get_clean());
         unset($this->currentSectionName);
     }
     
