@@ -15,7 +15,7 @@ class Renderer
 
     private string $currentSectionName = "";
 
-    private array $Sections = [];
+    private array $sections = [];
 
 
     /**
@@ -41,11 +41,11 @@ class Renderer
     public function section(string $name, mixed $content): void
     {
 
-        if (array_key_exists($name, $this->Sections)) {
+        if (array_key_exists($name, $this->sections)) {
             return;
         }
 
-        $this->Sections[$name] = $content;
+        $this->sections[$name] = $content;
     }
 
     /**
@@ -80,7 +80,7 @@ class Renderer
      */
     public function renderSection(string $name)
     {
-        return $this->Sections[$name];
+        return $this->sections[$name];
     }
 
     /**
@@ -113,7 +113,7 @@ class Renderer
             return;
         }
 
-        $this->Sections["content"] = $content;
+        $this->sections["content"] = $content;
 
         return $this->render($this->layoutPath);
     }
