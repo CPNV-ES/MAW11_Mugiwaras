@@ -38,30 +38,42 @@ class QueryBuilder
     public function get()
     {
         $query = "SELECT * FROM " . $this->tableName;
-        $query = $this->prepareWhereClause($query, $this->whereClauses);
+        $query = $this->prepareWhereClause($query);
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function where($column, $operator, $value)
+    private function addWhereClauseToArray(WhereClause $whereClause){
+        array_push($this->whereClauses, $whereClause);
+        return $this;
+    }
+
+    public function where($column, $operator, $value, $type = "AND")
     {
-        array_push($this->whereClauses, addSlashes($column) . " " . addSlashes($operator) . " '" . addSlashes($value) . "'");
+        $this->addWhereClauseToArray(new WhereClause($column, $operator, $value, $type));
+        return $this;
+    }
+
+    public function orWhere($column, $operator, $value)
+    {
+        $this->where($column, $operator, $value, "OR");
         return $this;
     }
 
     private function prepareWhereClause($query)
     {
-        if (!empty($this->whereClauses)) {
-            $query .= " WHERE ";
-            foreach ($this->whereClauses as $key => $whereClause) {
-                $query .= " " . $whereClause;
-                if ($key != count($this->whereClauses) - 1) {
-                    $query .= " AND ";
-                }
-            }
-            $this->whereClauses = [];
+        if (count($this->whereClauses) == 0) {
+            return $query;
         }
+        $query .= " WHERE";
+        foreach ($this->whereClauses as $key => $whereClause) {
+            if ($key > 0) {
+                $query .= " " . $whereClause->getType() . " ";
+            }
+            $query .= " " . $whereClause;
+        }
+        $this->whereClauses = array();
         return $query;
     }
 }
