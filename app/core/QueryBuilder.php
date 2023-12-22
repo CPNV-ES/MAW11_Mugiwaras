@@ -58,6 +58,7 @@ class QueryBuilder
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // todo refactor to accept key named array as paramerters instead of two arrays
     public function save($columns, $values)
     {
         $clause = new QueryClause($columns, null, $values);
@@ -66,6 +67,14 @@ class QueryBuilder
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
         return $this->pdo->lastInsertId();
+    }
+
+    public function delete(){
+        $this->query = "DELETE FROM " . $this->tableName;
+        $this->query = $this->prepareWhereClause($this->query);
+        $stmt = $this->pdo->prepare($this->query);
+        $stmt->execute();
+        return $stmt->rowCount();
     }
 
     private function addWhereClauseToArray(QueryClause $whereClause)
