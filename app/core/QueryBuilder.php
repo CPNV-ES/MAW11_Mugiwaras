@@ -69,8 +69,25 @@ class QueryBuilder
         return $this->pdo->lastInsertId();
     }
 
-    public function delete(){
+    public function delete()
+    {
         $this->query = "DELETE FROM " . $this->tableName;
+        $this->query = $this->prepareWhereClause($this->query);
+        $stmt = $this->pdo->prepare($this->query);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+
+    public function update(array $updateSet)
+    {
+        $this->query = "UPDATE " . $this->tableName . " SET ";
+        $index = array_flip(array_keys($updateSet));
+        foreach ($updateSet as $key => $value) {
+            $this->query .= $key . '="' . $value . '"';
+            if ($index[$key] < count($updateSet) - 1) {
+                $this->query .= ", ";
+            }
+        }
         $this->query = $this->prepareWhereClause($this->query);
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
