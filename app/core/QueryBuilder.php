@@ -55,6 +55,8 @@ class QueryBuilder
         $this->query = $this->prepareWhereClause($this->query);
         $this->query = $this->prepareOrderClause($this->query);
         $this->query .= $this->limitQuery;
+        $this->joinQuery = "";
+        $this->limitQuery = "";
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
