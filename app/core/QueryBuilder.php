@@ -64,8 +64,7 @@ class QueryBuilder
         $query = "INSERT INTO " . $this->tableName . " (" . $clause->getColumns() . ") VALUES (" . $clause->getValues() . ")";
         $this->query = $query;
         $stmt = $this->pdo->prepare($this->query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->execute();
     }
 
     private function addWhereClauseToArray(QueryClause $whereClause)
