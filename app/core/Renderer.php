@@ -137,6 +137,6 @@ class Renderer
      */
     public function __get($name)
     {
-        return $this->Sections[$name];
+        return $this->sections[$name];
     }
 }
