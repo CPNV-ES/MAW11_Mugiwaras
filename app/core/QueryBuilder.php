@@ -38,9 +38,18 @@ class QueryBuilder
         return $this;
     }
 
-    public function get()
+    public function get(array $columns = ['*'])
     {
-        $this->query = "SELECT * FROM " . $this->tableName;
+        $this->query = "SELECT ";
+        foreach ($columns as $key => $collumn) {
+            if ($key > 0) {
+                $this->query .= ",";
+            }
+            $this->query .= $collumn;
+            if ($key == count($columns) - 1) {
+                $this->query .= " FROM " . $this->tableName;
+            }
+        }
         $this->query = $this->prepareWhereClause($this->query);
         $this->query = $this->prepareOrderClause($this->query);
         $this->query .= $this->limitQuery;
@@ -49,7 +58,8 @@ class QueryBuilder
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function addWhereClauseToArray(QueryClause $whereClause){
+    private function addWhereClauseToArray(QueryClause $whereClause)
+    {
         array_push($this->whereClauses, $whereClause);
         return $this;
     }
@@ -66,22 +76,26 @@ class QueryBuilder
         return $this;
     }
 
-    private function addOrderClauseToArray(QueryClause $orderClause){
+    private function addOrderClauseToArray(QueryClause $orderClause)
+    {
         array_push($this->orderClauses, $orderClause);
     }
 
-    public function desc(array|string $columns){
+    public function desc(array|string $columns)
+    {
         $this->addOrderClauseToArray(new QueryClause($columns, "DESC"));
         return $this;
     }
 
-    public function asc(array|string $columns){
+    public function asc(array|string $columns)
+    {
         $this->addOrderClauseToArray(new QueryClause($columns, "ASC"));
         return $this;
     }
 
-    public function limit($limit, $offset = 0){
-        if($offset > 0){
+    public function limit($limit, $offset = 0)
+    {
+        if ($offset > 0) {
             $this->limitQuery .= " LIMIT " . $limit . " OFFSET " . $offset;
             return $this;
         }
@@ -105,13 +119,14 @@ class QueryBuilder
         return $query;
     }
 
-    private function prepareOrderClause($query){
-        if(count($this->orderClauses) == 0){
+    private function prepareOrderClause($query)
+    {
+        if (count($this->orderClauses) == 0) {
             return $query;
         }
         $query .= " ORDER BY";
-        foreach($this->orderClauses as $key => $orderClause){
-            if($key > 0){
+        foreach ($this->orderClauses as $key => $orderClause) {
+            if ($key > 0) {
                 $query .= ",";
             }
             $query .= " " . $orderClause;
