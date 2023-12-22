@@ -14,6 +14,7 @@ class QueryBuilder
     private string $tableName;
     private array $whereClauses = [];
     private array $orderClauses = [];
+    private string $limitQuery = "";
 
     private string $query = "";
 
@@ -42,6 +43,7 @@ class QueryBuilder
         $this->query = "SELECT * FROM " . $this->tableName;
         $this->query = $this->prepareWhereClause($this->query);
         $this->query = $this->prepareOrderClause($this->query);
+        $this->query .= $this->limitQuery;
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -75,6 +77,15 @@ class QueryBuilder
 
     public function asc(array $columns){
         $this->addOrderClauseToArray(new QueryClause($columns, "ASC"));
+        return $this;
+    }
+
+    public function limit($limit, $offset = 0){
+        if($offset > 0){
+            $this->limitQuery .= " LIMIT " . $limit . " OFFSET " . $offset;
+            return $this;
+        }
+        $this->limitQuery .= " LIMIT " . $limit;
         return $this;
     }
 
