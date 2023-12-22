@@ -128,4 +128,15 @@ class Renderer
     {
         $this->layoutPath = $layout;
     }
+    
+    /**
+     * PHP magic method to get the content of the section with the given name
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function __get($name)
+    {
+        return $this->Sections[$name];
+    }
 }
