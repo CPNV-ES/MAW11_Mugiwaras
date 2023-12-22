@@ -41,11 +41,11 @@ class QueryBuilder
     public function get(array $columns = ['*'])
     {
         $this->query = "SELECT ";
-        foreach ($columns as $key => $collumn) {
+        foreach ($columns as $key => $column) {
             if ($key > 0) {
                 $this->query .= ",";
             }
-            $this->query .= $collumn;
+            $this->query .= $column;
             if ($key == count($columns) - 1) {
                 $this->query .= " FROM " . $this->tableName;
             }
@@ -53,6 +53,16 @@ class QueryBuilder
         $this->query = $this->prepareWhereClause($this->query);
         $this->query = $this->prepareOrderClause($this->query);
         $this->query .= $this->limitQuery;
+        $stmt = $this->pdo->prepare($this->query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function save($columns, $values)
+    {
+        $clause = new QueryClause($columns, null, $values);
+        $query = "INSERT INTO " . $this->tableName . " (" . $clause->getColumns() . ") VALUES (" . $clause->getValues() . ")";
+        $this->query = $query;
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
