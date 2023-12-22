@@ -15,6 +15,7 @@ class QueryBuilder
     private array $whereClauses = [];
     private array $orderClauses = [];
     private string $limitQuery = "";
+    private string $joinQuery = "";
 
     private string $query = "";
 
@@ -50,6 +51,7 @@ class QueryBuilder
                 $this->query .= " FROM " . $this->tableName;
             }
         }
+        $this->query .= $this->joinQuery;
         $this->query = $this->prepareWhereClause($this->query);
         $this->query = $this->prepareOrderClause($this->query);
         $this->query .= $this->limitQuery;
@@ -136,6 +138,12 @@ class QueryBuilder
             return $this;
         }
         $this->limitQuery .= " LIMIT " . $limit;
+        return $this;
+    }
+
+    public function join($table, $extIdName, $intIdName)
+    {
+        $this->joinQuery .= " JOIN " . $table . " ON " . $extIdName . " = " . $intIdName;
         return $this;
     }
 
