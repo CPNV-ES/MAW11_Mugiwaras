@@ -70,12 +70,12 @@ class QueryBuilder
         array_push($this->orderClauses, $orderClause);
     }
 
-    public function desc(array $columns){
+    public function desc(array|string $columns){
         $this->addOrderClauseToArray(new QueryClause($columns, "DESC"));
         return $this;
     }
 
-    public function asc(array $columns){
+    public function asc(array|string $columns){
         $this->addOrderClauseToArray(new QueryClause($columns, "ASC"));
         return $this;
     }
