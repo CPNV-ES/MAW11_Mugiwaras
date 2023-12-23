@@ -51,13 +51,18 @@ class QueryBuilder
                 $this->query .= " FROM " . $this->tableName;
             }
         }
+
         $this->query .= $this->joinQuery;
-        $this->query = $this->prepareWhereClause($this->query);
-        $this->query = $this->prepareOrderClause($this->query);
+        $this->prepareClause($this->whereClauses, "WHERE");
+        $this->prepareClause($this->orderClauses, "ORDER BY", " ");
         $this->query .= $this->limitQuery;
+
         $this->joinQuery = "";
         $this->limitQuery = "";
+
         $stmt = $this->pdo->prepare($this->query);
+        print_r($stmt);
+        die();
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -76,7 +81,7 @@ class QueryBuilder
     public function delete()
     {
         $this->query = "DELETE FROM " . $this->tableName;
-        $this->query = $this->prepareWhereClause($this->query);
+        $this->prepareClause($this->whereClauses, "WHERE");
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
         return $stmt->rowCount();
@@ -92,7 +97,7 @@ class QueryBuilder
                 $this->query .= ", ";
             }
         }
-        $this->query = $this->prepareWhereClause($this->query);
+        $this->prepareClause($this->whereClauses, "WHERE");
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
         return $stmt->rowCount();
@@ -149,35 +154,18 @@ class QueryBuilder
         return $this;
     }
 
-    private function prepareWhereClause($query)
+    private function prepareClause($clauses, $keyword, $separator = ",")
     {
-        if (count($this->whereClauses) == 0) {
-            return $query;
+        if (count($clauses) == 0) {
+            return;
         }
-        $query .= " WHERE";
-        foreach ($this->whereClauses as $key => $whereClause) {
+        $this->query .= " " . $keyword;
+        foreach ($clauses as $key => $clause) {
             if ($key > 0) {
-                $query .= " " . $whereClause->getType() . " ";
+                $this->query .= $separator;
             }
-            $query .= " " . $whereClause;
+            $this->query .= " " . $clause;
         }
-        $this->whereClauses = array();
-        return $query;
-    }
-
-    private function prepareOrderClause($query)
-    {
-        if (count($this->orderClauses) == 0) {
-            return $query;
-        }
-        $query .= " ORDER BY";
-        foreach ($this->orderClauses as $key => $orderClause) {
-            if ($key > 0) {
-                $query .= ",";
-            }
-            $query .= " " . $orderClause;
-        }
-        $this->orderClauses = array();
-        return $query;
+        $clauses = array();
     }
 }
