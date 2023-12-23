@@ -7,7 +7,16 @@ class QueryClause{
     public readonly string $operator;
     public readonly array|string $values;
     public readonly string $type;
-
+    
+    /**
+     * __construct
+     *
+     * @param  array|string $columns
+     * @param  string $operator
+     * @param  array|string $values 
+     * @param  string $type type of where clause, ex: AND, OR
+     * @return void
+     */
     public function __construct($columns, $operator, $values = "", $type = ""){
         $this->columns = $this->addSlashesToArray($columns);
         $this->operator = addSlashes($operator);
@@ -19,6 +28,7 @@ class QueryClause{
         if ($this->values == ""){
             return $this->arrayToString($this->columns) . " " . $this->operator;
         }
+
         return $this->arrayToString($this->columns) . " " . $this->operator . ' "' . $this->arrayToString($this->values) . '" ';
     }
 
@@ -26,18 +36,23 @@ class QueryClause{
         if (!is_array($array)){
             return addSlashes($array);
         }
+
         $newArray = [];
+        
         foreach ($array as $item){
             array_push($newArray, addSlashes($item));
         }
+        
         return $newArray;
     }
 
-    private function arrayToString($array, $quote=false){
+    private function arrayToString($array, bool $quote=false){
         if (!is_array($array)){
             return $array;
         }
+
         $string = "";
+        
         foreach ($array as $item){
             if ($quote){
                 $string .= '"' . $item . '", ';
