@@ -6,7 +6,7 @@ use Mugiwaras\Framework\Core\Renderer;
 
 use Mugiwaras\Framework\Core\QueryBuilder;
 
-abstract class BaseController
+abstract class Controller
 {
     protected Renderer $renderer;
     protected QueryBuilder $qb;
