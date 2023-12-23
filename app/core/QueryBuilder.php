@@ -53,7 +53,9 @@ class QueryBuilder
         }
 
         $this->query .= $this->joinQuery;
-        $this->prepareClause($this->whereClauses, "WHERE");
+        $this->prepareClause($this->whereClauses, "WHERE", function ($clause) {
+            return $clause->getType();
+        });
         $this->prepareClause($this->orderClauses, "ORDER BY", " ");
         $this->query .= $this->limitQuery;
 
@@ -160,9 +162,14 @@ class QueryBuilder
             return;
         }
         $this->query .= " " . $keyword;
+
         foreach ($clauses as $key => $clause) {
             if ($key > 0) {
-                $this->query .= $separator;
+                if (is_callable($separator)) {
+                    $this->query .= " " . $separator($clause);
+                } else {
+                    $this->query .= $separator;
+                }
             }
             $this->query .= " " . $clause;
         }
