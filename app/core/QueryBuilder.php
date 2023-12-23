@@ -11,7 +11,7 @@ class QueryBuilder
 
     private static $instance = null;
 
-    private string $tableName;
+    private string $tableName = "";
 
     private array $whereClauses = [];
     private array $orderClauses = [];
@@ -82,9 +82,6 @@ class QueryBuilder
         $this->prepareClause($this->orderClauses, "ORDER BY", " ");
 
         $this->query .= $this->limitQuery;
-
-        $this->joinQuery = "";
-        $this->limitQuery = "";
 
         return $this->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -278,6 +275,9 @@ class QueryBuilder
     {
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute();
+
+        $this->clean();
+        
         return $stmt;
     }
 
@@ -290,7 +290,7 @@ class QueryBuilder
 
     private function checkIfTableNameIsSet()
     {
-        if ($this->tableName == "" || $this->tableName == null) {
+        if ($this->tableName == "") {
             throw new \Exception("No table name specified");
         }
     }
@@ -300,11 +300,22 @@ class QueryBuilder
         if (count($checkers) == 0) {
             return;
         }
-        if ($checkers['table']) {
+        if (in_array("table", $checkers)) {
             $this->checkIfTableNameIsSet();
         }
-        if ($checkers['where']) {
+        if (in_array("where", $checkers)) {
             $this->checkIfWhereClausesAreSet();
         }
+        $checkers = array();
+    }
+
+    private function clean()
+    {
+        $this->tableName = "";
+        $this->whereClauses = [];
+        $this->orderClauses = [];
+        $this->limitQuery = "";
+        $this->joinQuery = "";
+        $this->query = "";
     }
 }
