@@ -38,6 +38,7 @@ This is a php web framework that uses the MVC pattern. It is a project for the W
 ## Prerequisites
 
 * PHP 8.2.9 (TS)
+  * pdo_mysql
 * xdebug 3.2.2
 * composer 2.6.2
 
