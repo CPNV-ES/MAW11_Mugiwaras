@@ -38,7 +38,6 @@ This is a php web framework that uses the MVC pattern. It is a project for the W
 ## Prerequisites
 
 * PHP 8.2.9 (TS)
-  * pdo_mysql
 * xdebug 3.2.2
 * composer 2.6.2
 
@@ -103,3 +102,8 @@ composer install
 3. copy the .env.example or set the required environment variables.
 
 4. You are all set! You can now work with the framework.
+
+# Credits
+
+The section system of the framework is greatly inspired from devanych vue-renderer which did an amazing work.
+You can find the repository [here](https://github.com/devanych/view-renderer)
