@@ -79,7 +79,7 @@ class QueryBuilder
         $this->prepareClause($this->whereClauses, "WHERE", function (QueryClause $clause) {
             return $clause->getType();
         });
-        $this->prepareClause($this->orderClauses, "ORDER BY", " ");
+        $this->prepareClause($this->orderClauses, "ORDER BY");
 
         $this->query .= $this->limitQuery;
 
