@@ -147,8 +147,10 @@ class QueryBuilder
             }
         }
 
-        $this->prepareClause($this->whereClauses, "WHERE");
-
+        $this->prepareClause($this->whereClauses, "WHERE", function (QueryClause $clause) {
+            return $clause->getType();
+        });
+        
         return $this->execute()->rowCount();
     }
 
