@@ -8,8 +8,11 @@ abstract class Controller
 {
     protected Renderer $renderer;
 
-    public function __construct()
+    public function __construct($viewPath)
     {
-        $this->renderer = new Renderer(dirname(__DIR__) . '/views');
+        if (!isset($viewPath)) {
+            throw new \Exception("View path is not set");
+        }
+        $this->renderer = new Renderer($viewPath);
     }
 }
