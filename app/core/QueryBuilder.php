@@ -167,7 +167,7 @@ class QueryBuilder
      * @param  string $type
      * @return void
      */
-    public function where(string $column, string $operator, string $value, string $type = "AND")
+    public function where(string $column, string $operator, string|null $value, string $type = "AND")
     {
         $this->addWhereClauseToArray(new QueryClause($column, $operator, $value, $type));
         return $this;
