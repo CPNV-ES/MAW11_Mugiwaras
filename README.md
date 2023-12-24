@@ -1,5 +1,3 @@
-#
-
 <br />
 <div align="center">
 
@@ -77,16 +75,20 @@ This is a php web framework that uses the MVC pattern. It is a project for the W
 }
 ```
 
-2. then use composer to install the package
+2. Then use composer to install the package
+
 ```shell
-composer update 
+composer install 
 ```
 
-3. All done, you can now use the framework as you wish !
+3. copy the .env.example or set the required environment variables that you can find in the vendor under Mugiwaras\framework\.env.example
+
+4. All done, you can now use the framework as you wish !
 
 #### Working as a contributor
 
 1. Clone the repository.
+
 ```shell
 git clone https://github.com/CPNV-ES/MAW11_Mugiwaras_Framework
 ```
