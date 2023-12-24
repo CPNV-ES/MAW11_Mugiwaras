@@ -3,15 +3,15 @@
 <br />
 <div align="center">
 
-  <h3 align="center">MAW11_MUGIWARAS</h3>
+  <h1 align="center">MAW11_MUGIWARAS</h1>
 
   <p align="center">
     An awesome framework to create a website !
     <br />
     <br />
-    <a href="https://github.com/CPNV-ES/MAW11_Mugiwaras/issues">Report Bug</a>
+    <a href="https://github.com/CPNV-ES/MAW11_Mugiwaras_Framework/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D">Report Bug</a>
     ·
-    <a href="https://github.com/CPNV-ES/MAW11_Mugiwaras/issues">Request Feature</a>
+    <a href="https://github.com/CPNV-ES/MAW11_Mugiwaras_Framework/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=">Request Feature</a>
   </p>
 </div>
 
@@ -39,7 +39,7 @@ This is a php web framework that uses the MVC pattern. It is a project for the W
 
 ## Prerequisites
 
-* PHP 8.2.9 (NTS)
+* PHP 8.2.9 (TS)
 * xdebug 3.2.2
 * composer 2.6.2
 
@@ -47,7 +47,7 @@ This is a php web framework that uses the MVC pattern. It is a project for the W
 
 #### PHP
 
-> Use your favourite package manager to install PHP 8.2.9 (NTS). Or follow this [link](https://www.php.net/manual/install.php) that redirects to the official PHP download page.
+> Use your favourite package manager to install PHP 8.2.9 (TS). Or follow this [link](https://www.php.net/manual/install.php) that redirects to the official PHP download page.
 
 #### xdebug
 
@@ -60,14 +60,43 @@ This is a php web framework that uses the MVC pattern. It is a project for the W
 <!-- The following installation procedure is not valid.  -->
 ### Installation
 
-1. Clone the repo
+#### Installing as a composer package
 
-    ```shell
-    git clone https://github.com/CPNV-ES/MAW11_Mugiwaras
-    ```
+1. add the repository to your composer.json
+```json
+{
+  "require": {
+      "mugiwaras/framework": "dev-main"
+    },
+  "repositories": [
+    {
+      type": "vcs",
+      url": "https://github.com/CPNV-ES/MAW11_Mugiwaras_Framework"
+    }
+  ]
+}
+```
 
-2. Install the project dependencies
+2. then use composer to install the package
+```shell
+composer update 
+```
 
-    ```shell
-    composer install
-    ```
+3. All done, you can now use the framework as you wish !
+
+#### Working as a contributor
+
+1. Clone the repository.
+```shell
+git clone https://github.com/CPNV-ES/MAW11_Mugiwaras_Framework
+```
+
+2. install the dependencies with composer
+
+```shell
+composer install
+```
+
+3. copy the .env.example or set the required environment variables.
+
+4. You are all set! You can now work with the framework.
