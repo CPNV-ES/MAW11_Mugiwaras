@@ -4,7 +4,7 @@ namespace Mugiwaras\Framework\Core;
 
 use Mugiwaras\Framework\Core\QueryBuilder;
 
-abstract class Controller
+abstract class Model
 {
     protected QueryBuilder $qb;
 
