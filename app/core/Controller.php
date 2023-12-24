@@ -8,8 +8,9 @@ abstract class Controller
 {
     protected Renderer $renderer;
 
-    public function __construct($viewPath)
+    public function __construct()
     {
+        $viewPath = dirname(\Composer\Factory::getComposerFile()) . getenv('VIEW_PATH');
         if (!isset($viewPath)) {
             throw new \Exception("View path is not set");
         }
